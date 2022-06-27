@@ -64,4 +64,30 @@ public class ArtsmiaDAO {
 		}
 	}
 	
+	public List<String> getVertici(String ruolo) {
+		
+		String sql = "select distinct artists.artist_id "
+				+ "from artists, authorship "
+				+ "where artists.artist_id=authorship.artist_id "
+				+ "and role=?";
+		List<String> result = new ArrayList<>();
+		Connection conn = DBConnect.getConnection();
+
+		try {
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setString(1, ruolo);
+			ResultSet res = st.executeQuery();
+			while (res.next()) {
+
+				
+				result.add(new Ar);
+			}
+			conn.close();
+			return result;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }
