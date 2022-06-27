@@ -1,8 +1,10 @@
 package it.polito.tdp.artsmia;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
+import it.polito.tdp.artsmia.model.Adiacenza;
 import it.polito.tdp.artsmia.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -31,7 +33,7 @@ public class ArtsmiaController {
     private Button btnCalcolaPercorso;
 
     @FXML
-    private ComboBox<?> boxRuolo;
+    private ComboBox<String> boxRuolo;
 
     @FXML
     private TextField txtArtista;
@@ -41,8 +43,23 @@ public class ArtsmiaController {
 
     @FXML
     void doArtistiConnessi(ActionEvent event) {
+    	// pulisco l'area di testo
     	txtResult.clear();
-    	txtResult.appendText("Calcola artisti connessi");
+    	
+    	// controllo il grafo
+    	if(!this.model.isGrafoCreato()) {
+    		this.txtResult.setText("Errore: devi prima creare il grafo.");
+    		return;
+    	}
+    	
+    	// trovo gli artisti connessi
+    	List<Adiacenza> connessi = this.model.getArtistiConnessi();
+    	
+    	// stampo il risultato
+    	txtResult.setText("Artisti connessi:\n");
+    	for(Adiacenza a : connessi) {
+    		this.txtResult.appendText(a.toString() + "\n");
+    	}
     }
 
     @FXML
@@ -53,12 +70,30 @@ public class ArtsmiaController {
 
     @FXML
     void doCreaGrafo(ActionEvent event) {
+    	// pulisco l'area di testo
     	txtResult.clear();
-    	txtResult.appendText("Crea grafo");
+    	
+    	// controllo il ruolo
+    	String ruolo = this.boxRuolo.getValue();
+    	if(ruolo == null) {
+    		this.txtResult.setText("Errore: devi prima selezionare un ruolo.");
+    		return;
+    	}
+    	
+    	// creo il grafo
+    	this.model.creaGrafo(ruolo);
+    	
+    	// stampo il risultato
+    	txtResult.setText(String.format("Creato grafo con %d vertici e %d archi.", this.model.nVertici(), 
+    			this.model.nArchi()));
     }
 
     public void setModel(Model model) {
     	this.model = model;
+    	
+    	// riempio la tendina con i ruoli
+    	this.boxRuolo.getItems().clear();
+    	this.boxRuolo.getItems().addAll(this.model.getRuoli());
     }
 
     

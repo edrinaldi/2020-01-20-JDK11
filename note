@@ -1,0 +1,9 @@
+and a1.artist_id in (select distinct artists.artist_id as a 
+				from artists, authorship 
+				where artists.artist_id=authorship.artist_id 
+				and role="photographer")
+and a2.artist_id in (select distinct artists.artist_id as a 
+				from artists, authorship 
+				where artists.artist_id=authorship.artist_id 
+				and role="photographer")
+				
