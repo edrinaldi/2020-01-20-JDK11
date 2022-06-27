@@ -64,8 +64,38 @@ public class ArtsmiaController {
 
     @FXML
     void doCalcolaPercorso(ActionEvent event) {
+    	// pulisco l'area di testo
     	txtResult.clear();
-    	txtResult.appendText("Calcola percorso");
+    	
+    	// controllo il grafo
+    	if(!this.model.isGrafoCreato()) {
+    		this.txtResult.setText("Errore: devi prima creare il grafo.");
+    		return;
+    	}
+    	
+    	// controllo l'artista
+    	int idPartenza = 0;
+    	try {
+    		idPartenza = Integer.parseInt(this.txtArtista.getText());
+    	}
+    	catch(NumberFormatException e) {
+    		e.printStackTrace();
+    		this.txtResult.setText("Errore: devi inserire un valore numerico per l'artista.");
+    		return;
+    	}
+    	if(!this.model.isArtistaNelGrafo(idPartenza)) {
+    		this.txtResult.setText("Errore: l'artista deve essere presente nel grafo.");
+    		return;
+    	}
+    	
+    	// calcolo il cammino massimo
+    	this.model.calcolaPercorso(idPartenza);
+    	List<Integer> cammino = this.model.getPercorso();
+    	
+    	
+    	// stampo il risultato
+    	txtResult.setText("Trovato percorso massimo:\n" + cammino.toString() + "\n");
+    	this.txtResult.appendText("Numero di esposizioni: " + this.model.getnEsposizioni());
     }
 
     @FXML

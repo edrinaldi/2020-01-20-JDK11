@@ -1,9 +1,12 @@
-and a1.artist_id in (select distinct artists.artist_id as a 
-				from artists, authorship 
-				where artists.artist_id=authorship.artist_id 
-				and role="photographer")
-and a2.artist_id in (select distinct artists.artist_id as a 
-				from artists, authorship 
-				where artists.artist_id=authorship.artist_id 
-				and role="photographer")
+RICORSIONE
+- if(la soluzione parziale è più lunga di quella ottima)
+	- aggiorno la soluzione ottima
+- per ogni artista adiacente all'ultimo inserito
+	// inizio un ramo
+	- if(parziale contiene solo la partenza)
+		- mi segno il numero di esposizioni del ramo	// nEsposizioni = peso dell'arco che collega la partenza
+	- if(non è contenuto in parziale e il peso dell'arco == nEsposizioni)
+		- lo aggiungo
+		- chiamo la ricorsione	// proseguo per questo ramo
+		- rimuovo l'ultimo inserito	// backtracing
 				
